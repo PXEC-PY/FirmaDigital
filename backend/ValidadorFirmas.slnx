@@ -1,0 +1,13 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/ValidadorFirmas.Api/ValidadorFirmas.Api.csproj" />
+    <Project Path="src/ValidadorFirmas.Application/ValidadorFirmas.Application.csproj" />
+    <Project Path="src/ValidadorFirmas.Domain/ValidadorFirmas.Domain.csproj" />
+    <Project Path="src/ValidadorFirmas.Infrastructure/ValidadorFirmas.Infrastructure.csproj" />
+    <Project Path="src/ValidadorFirmas.Shared/ValidadorFirmas.Shared.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/ValidadorFirmas.Application.Tests/ValidadorFirmas.Application.Tests.csproj" />
+    <Project Path="tests/ValidadorFirmas.Infrastructure.Tests/ValidadorFirmas.Infrastructure.Tests.csproj" />
+  </Folder>
+</Solution>
