@@ -20,7 +20,11 @@ public static class DependencyInjection
         services.Configure<TrustStoreOptions>(configuration.GetSection(TrustStoreOptions.SectionName));
         services.Configure<JwtOptions>(configuration.GetSection(JwtOptions.SectionName));
 
-        services.AddHttpClient(nameof(RevocationChecker));
+        // AllowAutoRedirect = false: una URL de OCSP/CRL viene del certificado que se está
+        // validando (potencialmente controlado por un atacante); sin esto, un 302 podría
+        // sortear el guard SSRF que ya validó la URL original.
+        services.AddHttpClient(nameof(RevocationChecker))
+            .ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler { AllowAutoRedirect = false });
 
         services.AddSingleton<ITrustedCertificateStore, FileSystemTrustedCertificateStore>();
         services.AddSingleton<LocalCrlStore>();

@@ -35,6 +35,12 @@ public sealed class ValidationsController : ControllerBase
         if (file is null || file.Length == 0)
             return BadRequest("Debe adjuntar un archivo PDF.");
 
+        // Defensa en profundidad: el Content-Type lo envía el cliente y es spoofeable, así que
+        // no reemplaza la verificación real (magic bytes en el validador de la Application);
+        // igual se rechaza temprano un tipo declarado que ya de entrada no es PDF.
+        if (!string.Equals(file.ContentType, DocumentConstraints.AllowedContentType, StringComparison.OrdinalIgnoreCase))
+            return BadRequest("El tipo de contenido del archivo debe ser application/pdf.");
+
         await using var stream = new MemoryStream();
         await file.CopyToAsync(stream, cancellationToken);
 

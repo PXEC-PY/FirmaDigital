@@ -1,5 +1,6 @@
 ﻿using System.Security.Cryptography.X509Certificates;
 using iText.Kernel.Pdf;
+using iText.Kernel.Pdf.Annot;
 using iText.Signatures;
 using Microsoft.Extensions.Logging;
 using ValidadorFirmas.Application.Common.Models;
@@ -27,6 +28,13 @@ public sealed class PdfSignatureExtractor : IPdfSignatureExtractor
     {
         using var reader = new PdfReader(pdfStream);
         using var pdfDocument = new PdfDocument(reader);
+
+        if (ContainsAutomaticActions(pdfDocument))
+        {
+            throw new DomainException(
+                "El documento contiene acciones automáticas embebidas (apertura automática, JavaScript " +
+                "o ejecución de programas externos) y fue rechazado por seguridad.");
+        }
 
         var signatureUtil = new SignatureUtil(pdfDocument);
         var signatureNames = signatureUtil.GetSignatureNames();
@@ -113,6 +121,35 @@ public sealed class PdfSignatureExtractor : IPdfSignatureExtractor
             FechaHora: ToDateTimeOffset(timestampDate),
             AutoridadSellado: autoridadSellado,
             Valido: valido);
+    }
+
+    /// <summary>
+    /// Chequeo estructural best-effort contra vectores clásicos de PDF malicioso: apertura
+    /// automática (/OpenAction), acciones automáticas de documento/página (/AA) o ejecución de
+    /// programas externos (acciones /Launch en anotaciones). Es un complemento, no un reemplazo
+    /// de un antivirus real — un documento sin estas construcciones no está garantizado inocuo.
+    /// </summary>
+    private static bool ContainsAutomaticActions(PdfDocument pdfDocument)
+    {
+        var catalogDict = pdfDocument.GetCatalog().GetPdfObject();
+        if (catalogDict.ContainsKey(PdfName.OpenAction) || catalogDict.ContainsKey(PdfName.AA))
+            return true;
+
+        for (var i = 1; i <= pdfDocument.GetNumberOfPages(); i++)
+        {
+            var page = pdfDocument.GetPage(i);
+            if (page.GetPdfObject().ContainsKey(PdfName.AA))
+                return true;
+
+            foreach (PdfAnnotation annotation in page.GetAnnotations())
+            {
+                var action = annotation.GetPdfObject().GetAsDictionary(PdfName.A);
+                if (action is not null && PdfName.Launch.Equals(action.GetAsName(PdfName.S)))
+                    return true;
+            }
+        }
+
+        return false;
     }
 
     private static DateTimeOffset ToDateTimeOffset(DateTime dateTime) => dateTime.Kind switch

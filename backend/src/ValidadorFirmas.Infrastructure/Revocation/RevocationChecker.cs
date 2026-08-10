@@ -81,6 +81,9 @@ public sealed class RevocationChecker : IRevocationChecker
         if (string.IsNullOrEmpty(ocspUrl))
             return null;
 
+        if (!await SsrfGuard.IsUrlSafeAsync(ocspUrl, _logger, cancellationToken))
+            return null;
+
         try
         {
             var certificateId = new CertificateID(Asn1DigestFactory.Get("SHA1"), bcIssuer, bcCertificate.SerialNumber);
@@ -198,6 +201,9 @@ public sealed class RevocationChecker : IRevocationChecker
 
     private async Task<X509Crl?> TryDownloadCrlAsync(string url, CancellationToken cancellationToken)
     {
+        if (!await SsrfGuard.IsUrlSafeAsync(url, _logger, cancellationToken))
+            return null;
+
         try
         {
             var client = _httpClientFactory.CreateClient(nameof(RevocationChecker));

@@ -1,5 +1,6 @@
 ﻿using System.Text;
 using iText.Kernel.Pdf;
+using iText.Kernel.Pdf.Action;
 using Microsoft.Extensions.Logging.Abstractions;
 using ValidadorFirmas.Infrastructure.Signatures;
 using ValidadorFirmas.Infrastructure.Tests.TestUtils;
@@ -95,6 +96,23 @@ public class PdfSignatureExtractorTests
         var blankPdf = TestPdfSigner.CreateBlankPdf();
 
         Assert.Throws<DomainException>(() => _extractor.Extract(new MemoryStream(blankPdf)));
+    }
+
+    [Fact]
+    public void Extract_ConOpenActionEmbebido_RechazaElDocumento()
+    {
+        using var stream = new MemoryStream();
+        using (var writer = new PdfWriter(stream))
+        using (var pdfDoc = new PdfDocument(writer))
+        {
+            pdfDoc.AddNewPage();
+            pdfDoc.GetCatalog().SetOpenAction(PdfAction.CreateURI("https://ejemplo-malicioso.test"));
+        }
+
+        var (certificate, _, signature) = TestPdfSigner.CreateSelfSignedSigner("CN=Juan Perez, C=PY");
+        var signedPdf = TestPdfSigner.Sign(stream.ToArray(), "Signature1", certificate, signature);
+
+        Assert.Throws<DomainException>(() => _extractor.Extract(new MemoryStream(signedPdf)));
     }
 
     private static int IndexOf(byte[] haystack, byte[] needle)
