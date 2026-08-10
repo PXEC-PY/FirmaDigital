@@ -1,8 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Options;
 using ValidadorFirmas.Application.Common.Ports;
 using ValidadorFirmas.Infrastructure.Certificates;
 using ValidadorFirmas.Infrastructure.Options;
@@ -20,7 +18,6 @@ public static class DependencyInjection
     public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
     {
         services.Configure<TrustStoreOptions>(configuration.GetSection(TrustStoreOptions.SectionName));
-        services.Configure<PersistenceOptions>(configuration.GetSection(PersistenceOptions.SectionName));
         services.Configure<JwtOptions>(configuration.GetSection(JwtOptions.SectionName));
 
         services.AddHttpClient(nameof(RevocationChecker));
@@ -34,15 +31,15 @@ public static class DependencyInjection
 
         services.AddDbContext<ValidadorFirmasDbContext>((serviceProvider, options) =>
         {
-            var environment = serviceProvider.GetRequiredService<IHostEnvironment>();
-            var persistenceOptions = serviceProvider.GetRequiredService<IOptions<PersistenceOptions>>().Value;
+            var connectionString = configuration.GetConnectionString("Postgres");
+            if (string.IsNullOrWhiteSpace(connectionString))
+            {
+                throw new InvalidOperationException(
+                    "La cadena de conexión ConnectionStrings:Postgres no está configurada (variable de entorno " +
+                    "ConnectionStrings__Postgres).");
+            }
 
-            var directory = Path.GetFullPath(
-                Path.Combine(environment.ContentRootPath, persistenceOptions.DatabaseDirectory));
-            Directory.CreateDirectory(directory);
-
-            var databasePath = Path.Combine(directory, persistenceOptions.DatabaseFileName);
-            options.UseSqlite($"Data Source={databasePath}");
+            options.UseNpgsql(connectionString);
         });
 
         services.AddScoped<IUserRepository, UserRepository>();

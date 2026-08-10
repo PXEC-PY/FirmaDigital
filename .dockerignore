@@ -1,0 +1,10 @@
+backend/**/bin/
+backend/**/obj/
+backend/tests/
+backend/**/*.user
+frontend/
+docs/
+Data/
+logs/
+.git/
+.vs/

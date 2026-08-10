@@ -20,6 +20,19 @@ CRL/                   Listas de revocación locales (ya cargada la de la raíz)
 
 - .NET SDK 10 (`dotnet --version`)
 - Node.js 20+ y npm
+- Una base PostgreSQL (local o gratis en [Supabase](https://supabase.com)/[Neon](https://neon.tech))
+
+## Variables de entorno (backend)
+
+El backend falla al arrancar si faltan. Se cargan como variables de entorno (formato
+`Seccion__Clave`), nunca en `appsettings.json`:
+
+| Variable | Descripción |
+|---|---|
+| `Jwt__SigningKey` | Clave de firma JWT, mínimo 32 caracteres. Generarla con `openssl rand -base64 48`. |
+| `ConnectionStrings__Postgres` | Cadena de conexión a Postgres, ej. `Host=...;Database=...;Username=...;Password=...`. |
+| `Admin__Email` / `Admin__InitialPassword` | Credenciales del administrador inicial (solo se usan si la tabla `Users` está vacía). |
+| `Cors__AllowedOrigins__0` | Origen permitido para el frontend (en local: `http://localhost:5173`). |
 
 ## Cómo correrlo
 
@@ -27,6 +40,7 @@ CRL/                   Listas de revocación locales (ya cargada la de la raíz)
 
 ```bash
 cd backend
+export Jwt__SigningKey="..." ConnectionStrings__Postgres="..." Admin__Email="..." Admin__InitialPassword="..."
 dotnet run --project src/ValidadorFirmas.Api
 ```
 
@@ -41,6 +55,13 @@ npm run dev
 ```
 
 El frontend apunta a `http://localhost:5214/api/v1` por defecto (`frontend/.env`).
+
+## Deploy
+
+`render.yaml` en la raíz define el Blueprint para desplegar en [Render](https://render.com)
+(API como Web Service Docker + frontend como Static Site), con Postgres externo
+(Supabase/Neon). Ver instrucciones paso a paso en el mensaje de configuración del
+proyecto o en `render.yaml`.
 
 ## Tests
 
