@@ -17,6 +17,10 @@ RUN dotnet publish backend/src/ValidadorFirmas.Api/ValidadorFirmas.Api.csproj -c
 FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS final
 WORKDIR /app
 
+# Npgsql requiere libgssapi para autenticación, ausente en la imagen aspnet slim.
+RUN apt-get update && apt-get install -y --no-install-recommends libgssapi-krb5-2 \
+    && rm -rf /var/lib/apt/lists/*
+
 COPY --from=build /app .
 COPY TrustedCertificates /app/TrustedCertificates
 COPY CRL /app/CRL
