@@ -27,7 +27,7 @@ export function SignatureCard({ signature }: { signature: SignatureDto }) {
         value={<span className="font-mono text-xs">{truncateMiddle(signature.thumbprint, 10)}</span>}
       />
       {signature.motivo && (
-        <p className="pt-1 text-xs text-slate-500 dark:text-slate-400">{signature.motivo}</p>
+        <p className="pt-1 text-xs text-slate-400">{signature.motivo}</p>
       )}
     </InfoCard>
   )

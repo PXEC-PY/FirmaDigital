@@ -34,7 +34,8 @@ export function ResultView({ result, onValidateAnother }: ResultViewProps) {
         <button
           type="button"
           onClick={onValidateAnother}
-          className="rounded-full border border-slate-300 bg-white px-5 py-2.5 text-sm font-medium text-slate-700 shadow-sm transition hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700"
+          className="rounded-full border border-white/30 bg-white px-5 py-2.5 text-sm font-medium shadow-lg transition hover:bg-slate-50"
+          style={{ color: 'var(--meridional-teal)' }}
         >
           Validar otro documento
         </button>

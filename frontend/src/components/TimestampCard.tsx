@@ -7,7 +7,7 @@ export function TimestampCard({ timestamp }: { timestamp: TimestampDto }) {
   if (!timestamp.presente) {
     return (
       <InfoCard title="Timestamp">
-        <p className="text-sm text-slate-500 dark:text-slate-400">
+        <p className="text-sm text-slate-400">
           La firma no incluye un sello de tiempo (RFC 3161).
         </p>
       </InfoCard>

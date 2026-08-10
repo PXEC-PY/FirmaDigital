@@ -24,7 +24,7 @@ export function RevocationCard({ revocation }: { revocation: RevocationDto }) {
       <InfoRow label="Fuente" value={SOURCE_LABEL[revocation.fuente]} />
       <InfoRow label="Consultado" value={formatDateTime(revocation.fechaConsulta)} />
       {revocation.motivo && (
-        <p className="pt-1 text-xs text-slate-500 dark:text-slate-400">{revocation.motivo}</p>
+        <p className="pt-1 text-xs text-slate-400">{revocation.motivo}</p>
       )}
     </InfoCard>
   )

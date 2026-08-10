@@ -36,11 +36,7 @@ export function DropZone({ file, onFileSelected, onClear, errorMessage, disabled
         onDrop={handleDrop}
         className={`flex min-h-64 cursor-pointer flex-col items-center justify-center gap-4 rounded-2xl border-2 border-dashed p-10 text-center transition-colors ${
           disabled ? 'cursor-not-allowed opacity-60' : ''
-        } ${
-          isDragOver
-            ? 'border-blue-500 bg-blue-50/60 dark:border-blue-400 dark:bg-blue-500/10'
-            : 'border-slate-300 bg-slate-50/60 hover:border-slate-400 dark:border-slate-700 dark:bg-slate-900/40 dark:hover:border-slate-600'
-        }`}
+        } ${isDragOver ? 'border-teal-500 bg-teal-50' : 'border-slate-300 bg-slate-50 hover:border-slate-400'}`}
       >
         <input
           ref={inputRef}
@@ -55,8 +51,17 @@ export function DropZone({ file, onFileSelected, onClear, errorMessage, disabled
           }}
         />
 
-        <div className="flex h-14 w-14 items-center justify-center rounded-full bg-blue-50 text-blue-600 dark:bg-blue-500/10 dark:text-blue-400">
-          <svg viewBox="0 0 24 24" fill="none" className="h-7 w-7" stroke="currentColor" strokeWidth={1.5}>
+        <div
+          className="flex h-14 w-14 items-center justify-center rounded-full"
+          style={{ backgroundColor: 'color-mix(in srgb, var(--meridional-teal) 12%, white)' }}
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            className="h-7 w-7"
+            stroke="var(--meridional-teal)"
+            strokeWidth={1.5}
+          >
             <path
               strokeLinecap="round"
               strokeLinejoin="round"
@@ -67,8 +72,8 @@ export function DropZone({ file, onFileSelected, onClear, errorMessage, disabled
 
         {file ? (
           <div>
-            <p className="text-sm font-medium text-slate-900 dark:text-slate-100">{file.name}</p>
-            <p className="text-xs text-slate-500 dark:text-slate-400">{formatBytes(file.size)}</p>
+            <p className="text-sm font-medium text-slate-900">{file.name}</p>
+            <p className="text-xs text-slate-500">{formatBytes(file.size)}</p>
             <button
               type="button"
               onClick={(e) => {
@@ -76,17 +81,17 @@ export function DropZone({ file, onFileSelected, onClear, errorMessage, disabled
                 onClear()
               }}
               disabled={disabled}
-              className="mt-3 text-xs font-medium text-slate-500 underline decoration-slate-300 underline-offset-2 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200"
+              className="mt-3 text-xs font-medium text-slate-500 underline decoration-slate-300 underline-offset-2 hover:text-slate-700"
             >
               Quitar archivo
             </button>
           </div>
         ) : (
           <div>
-            <p className="text-sm font-medium text-slate-700 dark:text-slate-300">
+            <p className="text-sm font-medium text-slate-700">
               Arrastrá tu PDF acá o hacé clic para seleccionarlo
             </p>
-            <p className="mt-1 text-xs text-slate-400 dark:text-slate-500">PDF · máximo 20 MB</p>
+            <p className="mt-1 text-xs text-slate-400">PDF · máximo 20 MB</p>
           </div>
         )}
 
@@ -97,15 +102,13 @@ export function DropZone({ file, onFileSelected, onClear, errorMessage, disabled
             !disabled && inputRef.current?.click()
           }}
           disabled={disabled}
-          className="rounded-full border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 shadow-sm transition hover:bg-slate-50 disabled:opacity-60 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700"
+          className="rounded-full border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 shadow-sm transition hover:bg-slate-50 disabled:opacity-60"
         >
           Seleccionar PDF
         </button>
       </div>
 
-      {errorMessage && (
-        <p className="mt-2 text-sm text-red-600 dark:text-red-400">{errorMessage}</p>
-      )}
+      {errorMessage && <p className="mt-2 text-sm text-red-600">{errorMessage}</p>}
     </div>
   )
 }

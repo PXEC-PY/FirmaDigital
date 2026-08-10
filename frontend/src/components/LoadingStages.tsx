@@ -23,20 +23,24 @@ export function LoadingStages() {
   }, [])
 
   return (
-    <div className="flex min-h-64 flex-col items-center justify-center gap-6 rounded-2xl border border-slate-200/80 bg-white p-10 shadow-sm dark:border-slate-800 dark:bg-slate-900">
+    <div className="mx-auto flex min-h-64 max-w-xl flex-col items-center justify-center gap-6 rounded-2xl border border-slate-200 bg-white p-10 shadow-lg">
       <div className="relative flex h-12 w-12 items-center justify-center">
-        <span className="absolute h-12 w-12 animate-spin rounded-full border-2 border-slate-200 border-t-blue-600 dark:border-slate-700 dark:border-t-blue-400" />
+        <span
+          className="absolute h-12 w-12 animate-spin rounded-full border-2 border-slate-200"
+          style={{ borderTopColor: 'var(--meridional-teal)' }}
+        />
       </div>
 
       <div className="text-center">
-        <p className="text-sm font-medium text-slate-900 dark:text-slate-100">{STAGES[stageIndex]}</p>
+        <p className="text-sm font-medium text-slate-900">{STAGES[stageIndex]}</p>
         <div className="mt-4 flex justify-center gap-1.5">
           {STAGES.map((stage, index) => (
             <span
               key={stage}
-              className={`h-1.5 w-6 rounded-full transition-colors ${
-                index <= stageIndex ? 'bg-blue-600 dark:bg-blue-400' : 'bg-slate-200 dark:bg-slate-700'
-              }`}
+              className="h-1.5 w-6 rounded-full transition-colors"
+              style={{
+                backgroundColor: index <= stageIndex ? 'var(--meridional-teal)' : '#e2e8f0',
+              }}
             />
           ))}
         </div>

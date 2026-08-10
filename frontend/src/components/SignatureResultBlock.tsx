@@ -16,7 +16,7 @@ export function SignatureResultBlock({ signature, index, total }: SignatureResul
   return (
     <section>
       {total > 1 && (
-        <h4 className="mb-3 text-xs font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-500">
+        <h4 className="mb-3 text-xs font-semibold uppercase tracking-wider text-slate-500">
           Firma {index + 1} de {total} · {signature.nombreCampo}
         </h4>
       )}

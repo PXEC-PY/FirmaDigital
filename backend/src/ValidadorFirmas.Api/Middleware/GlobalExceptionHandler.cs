@@ -51,6 +51,18 @@ public sealed class GlobalExceptionHandler : IExceptionHandler
                 validationException.Message,
                 validationException.Errors),
 
+            UnauthorizedException unauthorizedException => (
+                StatusCodes.Status401Unauthorized,
+                "No autorizado",
+                unauthorizedException.Message,
+                null),
+
+            NotFoundException notFoundException => (
+                StatusCodes.Status404NotFound,
+                "No encontrado",
+                notFoundException.Message,
+                null),
+
             DomainException domainException => (
                 StatusCodes.Status422UnprocessableEntity,
                 "No se pudo procesar el documento",

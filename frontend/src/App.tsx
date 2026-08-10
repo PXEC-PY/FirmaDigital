@@ -35,7 +35,7 @@ function App() {
   const isLoading = mutation.isPending
 
   return (
-    <div className="min-h-full bg-slate-50 dark:bg-slate-950">
+    <div className="min-h-full" style={{ backgroundColor: 'var(--meridional-teal)' }}>
       <Header />
 
       <main className="mx-auto max-w-5xl px-6 py-10">
@@ -44,7 +44,10 @@ function App() {
         ) : isLoading ? (
           <LoadingStages />
         ) : (
-          <form onSubmit={handleSubmit(onSubmit)} className="mx-auto max-w-xl">
+          <form
+            onSubmit={handleSubmit(onSubmit)}
+            className="mx-auto max-w-xl rounded-2xl bg-white p-6 shadow-lg sm:p-8"
+          >
             <DropZone
               file={file}
               onFileSelected={(selected) => setValue('file', selected, { shouldValidate: true })}
@@ -53,7 +56,7 @@ function App() {
             />
 
             {mutation.isError && (
-              <div className="mt-4 rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-700 dark:border-red-500/30 dark:bg-red-500/10 dark:text-red-400">
+              <div className="mt-4 rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-700">
                 {mutation.error instanceof ApiError
                   ? mutation.error.message
                   : 'Ocurrió un error inesperado al validar el documento.'}
@@ -63,7 +66,10 @@ function App() {
             <button
               type="submit"
               disabled={!file}
-              className="mt-6 w-full rounded-full bg-blue-600 px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:bg-slate-300 dark:disabled:bg-slate-700"
+              className="mt-6 w-full rounded-full px-5 py-3 text-sm font-semibold text-white shadow-sm transition disabled:cursor-not-allowed disabled:bg-slate-300"
+              style={{ backgroundColor: file ? 'var(--meridional-teal)' : undefined }}
+              onMouseEnter={(e) => file && (e.currentTarget.style.backgroundColor = 'var(--meridional-teal-dark)')}
+              onMouseLeave={(e) => file && (e.currentTarget.style.backgroundColor = 'var(--meridional-teal)')}
             >
               Validar
             </button>

@@ -10,3 +10,8 @@ Thumbs.db
 # Logs
 *.log
 logs/
+
+# Database
+Data/*.db
+Data/*.db-shm
+Data/*.db-wal

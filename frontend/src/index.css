@@ -1,7 +1,12 @@
 @import "tailwindcss";
 
 :root {
-  color-scheme: light dark;
+  color-scheme: light;
+  /* Paleta de marca La Meridional (aproximada de meridional.com.py) */
+  --meridional-teal-dark: #0b5347;
+  --meridional-teal: #0f6b5a;
+  --meridional-teal-light: #14806c;
+  --meridional-gold: #8a7a3a;
 }
 
 html,
@@ -14,14 +19,7 @@ body {
   margin: 0;
   font-family:
     -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  background-color: #f6f7f9;
+  background-color: var(--meridional-teal);
   color: #14161a;
   -webkit-font-smoothing: antialiased;
-}
-
-@media (prefers-color-scheme: dark) {
-  body {
-    background-color: #0d0e12;
-    color: #e8e9ec;
-  }
 }
