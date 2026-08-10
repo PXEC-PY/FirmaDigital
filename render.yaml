@@ -16,18 +16,10 @@ services:
         sync: false
       - key: ConnectionStrings__Postgres
         sync: false
+      # Frontend servido desde GitHub Pages (PXEC-PY.github.io), no desde Render.
       - key: Cors__AllowedOrigins__0
-        value: https://validador-firmas.onrender.com
+        value: https://pxec-py.github.io
       - key: TrustStore__RootCertificatesPath
         value: /app/TrustedCertificates
       - key: TrustStore__CrlPath
         value: /app/CRL
-
-  - type: web
-    name: validador-firmas
-    runtime: static
-    buildCommand: cd frontend && npm install && npm run build
-    staticPublishPath: frontend/dist
-    envVars:
-      - key: VITE_API_BASE_URL
-        value: https://validador-firmas-api.onrender.com/api/v1

@@ -58,10 +58,14 @@ El frontend apunta a `http://localhost:5214/api/v1` por defecto (`frontend/.env`
 
 ## Deploy
 
-`render.yaml` en la raíz define el Blueprint para desplegar en [Render](https://render.com)
-(API como Web Service Docker + frontend como Static Site), con Postgres externo
-(Supabase/Neon). Ver instrucciones paso a paso en el mensaje de configuración del
-proyecto o en `render.yaml`.
+- **Backend**: `render.yaml` en la raíz define el Blueprint para desplegar la API en
+  [Render](https://render.com) (Web Service Docker), con Postgres externo (Supabase/Neon).
+- **Frontend**: `.github/workflows/deploy-pages.yml` compila y publica `frontend/` en
+  **GitHub Pages** en cada push a `main` que toque `frontend/`. Requiere un paso manual una
+  sola vez: en el repo, Settings → Pages → Source: **GitHub Actions**. Queda publicado en
+  `https://pxec-py.github.io/FirmaDigital/`.
+- El CORS del backend (`Cors__AllowedOrigins__0` en `render.yaml`) está configurado para
+  permitir ese origen de GitHub Pages.
 
 ## Tests
 
