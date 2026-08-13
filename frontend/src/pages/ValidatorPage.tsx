@@ -13,7 +13,6 @@ export function ValidatorPage() {
   const {
     watch,
     setValue,
-    resetField,
     handleSubmit,
     formState: { errors },
   } = useForm<UploadFormValues>({
@@ -22,12 +21,16 @@ export function ValidatorPage() {
 
   const file = watch('file') ?? null
 
+  function clearFile() {
+    setValue('file', undefined as unknown as File, { shouldValidate: false })
+  }
+
   function onSubmit(values: UploadFormValues) {
     mutation.mutate(values.file)
   }
 
   function handleReset() {
-    resetField('file')
+    clearFile()
     mutation.reset()
   }
 
@@ -47,7 +50,7 @@ export function ValidatorPage() {
           <DropZone
             file={file}
             onFileSelected={(selected) => setValue('file', selected, { shouldValidate: true })}
-            onClear={() => resetField('file')}
+            onClear={clearFile}
             errorMessage={errors.file?.message}
           />
 
