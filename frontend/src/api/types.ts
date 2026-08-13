@@ -86,3 +86,23 @@ export interface ProblemDetails {
   status?: number
   errors?: string[]
 }
+
+export type UserRole = 'Administrador' | 'Auditor' | 'Usuario'
+
+export interface UserDto {
+  id: string
+  email: string
+  nombreCompleto: string
+  role: UserRole
+  activo: boolean
+  createdAtUtc: string
+  ultimoAccesoUtc: string | null
+}
+
+export interface AuthResultDto {
+  accessToken: string
+  accessTokenExpiresAtUtc: string
+  refreshToken: string
+  refreshTokenExpiresAtUtc: string
+  usuario: UserDto
+}
